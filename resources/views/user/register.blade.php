@@ -14,7 +14,6 @@
                     {!! $errors->first('email', "<span class='form-error'> :message </span>") !!}
                 </div>
             </div>
-
         </div>
         <div class="form-group row">
             <label for="name" class="col-sm-2 col-form-label">이름</label>

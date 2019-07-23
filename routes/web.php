@@ -17,6 +17,13 @@ Route::get('/', function () {
 
 Route::get('/user/register', 'MainController@register');
 Route::get('/user/logout', 'MainController@logoutProcess');
-
 Route::post('/user/login', 'MainController@loginProcess');
 Route::post('/user/register', 'MainController@registerProcess');
+
+Route::get('/board', 'BoardController@listPage');
+Route::get('/board/view/{id}', 'BoardController@viewPage')->where(['id' => '[0-9]+']);
+
+Route::group(['middleware' => ['checkLogin']], function() {
+    Route::get('/board/write', 'BoardController@writePage')->middleware('checkLogin');
+    Route::post('/board/write', 'BoardController@writeProcess');
+});
