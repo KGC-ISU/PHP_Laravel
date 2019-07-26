@@ -2,27 +2,21 @@
 
 @section('content')
 
-    <h2 class="mt-5">글 보기</h2>
-    <table class="table table-striped mt-3">
-        <tr>
-            <th>글번호</th>
-            <th width="60%">글제목</th>
-            <th>글쓴이</th>
-        </tr>
-        <tr>
-            <td>{{$data->id}}</td>
-            <td>{{$data->title}}</td>
-            <td>{{$data->user()->first()->name}}</td>
-        </tr>
-    </table>
+    <h1>{{ $data->title }}</h1>
+    
+    <div class="card">
+        <div class="card-header">
+            <span>{{ $data->user()->first()->name }} &nbsp</span>
+            <span>{{ $data->created_at }}</span>
+        </div>
+        <div class="card-body">
+            @foreach($files as $fileName)
+                <img src="/image/{{ $fileName }}" alt="image">
+            @endforeach
+            {{ $data->content }}
+        </div>
+    </div>
 
-    <table class="table table-striped">
-        <tr>
-            <th width="100%">글 내용</th>
-        </tr>
-        <tr style="background-color: rgba(0, 0, 0, 0.15); color: #000;">
-            <td>{{$data->content}}</td>
-        </tr>
-    </table>
+
 
 @endsection

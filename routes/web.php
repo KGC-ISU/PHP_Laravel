@@ -23,7 +23,11 @@ Route::post('/user/register', 'MainController@registerProcess');
 Route::get('/board', 'BoardController@listPage');
 Route::get('/board/view/{id}', 'BoardController@viewPage')->where(['id' => '[0-9]+']);
 
+Route::get('/board/write', 'BoardController@writePage');
+
 Route::group(['middleware' => ['checkLogin']], function() {
     Route::get('/board/write', 'BoardController@writePage')->middleware('checkLogin');
     Route::post('/board/write', 'BoardController@writeProcess');
 });
+
+Route::get('/image/{name}', 'BoardController@getImage');

@@ -17,6 +17,19 @@ class BoardController extends Controller
         //타이틀과 컨텐츠는 공백이여서는 안되고
         //타이틀은 한글, 영문 띄어쓰기만 사용 가능 -- 보너스
 
+
+        $files = $req->file('file');
+        $name[] = null;
+
+        for($i = 0; $i < count($files); $i++) {
+
+            $files[$i]->storeAs('upload', $files[$i]->getClientOriginalName());
+            $name[$i] = $files[$i]->getClientOriginalName();
+
+        }
+
+        $files = implode(',', $name);
+
         $data = $req->all();
 
         $rules = [
@@ -36,7 +49,13 @@ class BoardController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        auth()->user()->boards()->create(['title'=>$data['title'], 'content'=>$data['content']]);
+        auth()->user()->boards()->create(
+            [
+                'title' => $data['title'],
+                'content' => $data['content'],
+                'file' => $files
+            ]
+        );
 
         return redirect('/')->with('fm', '글이 작성되었습니다.');
     }
@@ -53,11 +72,24 @@ class BoardController extends Controller
     {
         $data = Board::find($id);
 
+        $files = explode(',', $data->file);
+
         if(!$data) {
             return redirect('/board')->with('fm', '없는 글입니다.');
         }
 
         // 뷰페이지 만들기
-        return view('board/view', ['data' => $data]);
+        return view('board/view', ['data' => $data, 'files' => $files]);
+    }
+
+    public function getImage(Request $req, $name)
+    {
+        $file = storage_path('app/upload/' . $name);
+
+        if(!file_exists($file)) {
+            $file = storage_path('app/upload/notfound.png');
+        }
+
+        return response()->download($file);
     }
 }

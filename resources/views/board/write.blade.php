@@ -4,7 +4,7 @@
 
     <h1>글쓰기</h1>
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="title">제목</label>
@@ -19,6 +19,10 @@
             <div class="invalid-feedback">
                 {!! $errors->first('content', "<span class='form-error'> :message </span>") !!}
             </div>
+        </div>
+        <div class="form-group">
+            <label for="file">파일첨부</label>
+            <input type="file" class="form-control" id="file" name="file[]" multiple="multiple">
         </div>
         <button type="submit" class="btn btn-primary">글작성</button>
     </form>
